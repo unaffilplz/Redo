@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class background : MonoBehaviour {	
+public class Background : MonoBehaviour {	
 	
 	// Skill Proficincies
 

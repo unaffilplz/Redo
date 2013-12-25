@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
+using System.Linq;
 
 public class Fire : MonoBehaviour {
 
@@ -19,6 +20,7 @@ public class Fire : MonoBehaviour {
 	public AudioSource pistolSound;
 
 
+
 	// Used to get dirNum, the direction of the target
 	float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up) {
 		Vector3 perp = Vector3.Cross(fwd, targetDir);
@@ -30,8 +32,8 @@ public class Fire : MonoBehaviour {
 		} else {
 			return 0f;
 		}
-	}
-
+	}	
+	
 	// Initialization
 	void Start () {
 		fireAngle = 30.0F;
@@ -56,29 +58,47 @@ public class Fire : MonoBehaviour {
 		// our defined firing cone 
 		if(Input.GetButtonDown("Fire1") && timer > cooldownTime){
 			Collider[] colliders = Physics.OverlapSphere(playerPosition, radius);
-			pistolSound.Play();
+			pistolSound.Play();			
+
+			Collider[] sortedOrder = colliders.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToArray(); //.ToArray() or .ToList() if you need them all
+			colliders = sortedOrder;
+
 			foreach (Collider entity in colliders) {
-				target = entity.transform;
+
+				Transform target = entity.transform;
+				Debug.Log(target);
 
 				Vector3 targetDir = target.position - transform.position;
-				
+
+
+
 				Vector3 heading = target.position - transform.position;
 				dirNum = AngleDir(transform.forward, heading, transform.up);
 				// Angle between player forward facing and target
 				float angle = Vector3.Angle(forward, targetDir);
-				Debug.Log (angle);
+				Debug.Log(angle);
 				if (entity.GetComponent<Enemy>()){
 					if (angle <= fireAngle){
-						Debug.Log(angle);
-						Destroy(entity.gameObject);
-						break;
+
+
+
+
+						Debug.Log ((colliders[0].gameObject.transform.position - transform.position).sqrMagnitude);
+
+						RaycastHit hit;
+
+						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+						if (Physics.Raycast(playerPosition, targetDir, out hit)){
+							if (hit.collider.transform.GetComponent<Enemy>()){
+								Destroy(entity.gameObject);
+								break;
+							}
+						}
 					} 
 				}								
 			}
 			timer = 0.0F;
 		}
-
-
 	}
 }
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class playerMain : MonoBehaviour {
+public class PlayerMain : MonoBehaviour {
 
 	// Flags
 
@@ -22,7 +22,7 @@ public class playerMain : MonoBehaviour {
 	
 	// Background
 	
-	public background Background;
+	public Background background;
 	
 	// Skill proficiencies	
 
@@ -58,14 +58,14 @@ public class playerMain : MonoBehaviour {
 
 	public void applyBackground()
 	{								
-		search = Background.searchMod;
-		detection = Background.detectionMod;
-		stealth = Background.stealthMod;
-		lockpick = Background.lockpickMod;
-		survival = Background.survivalMod;
+		search = background.searchMod;
+		detection = background.detectionMod;
+		stealth = background.stealthMod;
+		lockpick = background.lockpickMod;
+		survival = background.survivalMod;
 
-		electronics = Background.electronicsMod;
-		repair = Background.repairMod;
+		electronics = background.electronicsMod;
+		repair = background.repairMod;
 
 		//backgroundApplied = true;
 		Debug.Log("Background applied");
@@ -85,13 +85,13 @@ public class playerMain : MonoBehaviour {
 
 		if (GUI.Button(new Rect(10, 10, 100, 30), "Thief"))
 		{
-			Background.characterBackground("thief");
+			background.characterBackground("thief");
 			applyBackground();
 		}
 
 		if (GUI.Button(new Rect(10, 40, 100, 30), "Scavenger"))
 		{
-			Background.characterBackground("scavenger");
+			background.characterBackground("scavenger");
 			applyBackground();
 		}
 			
