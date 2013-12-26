@@ -41,35 +41,39 @@ public class Fire : MonoBehaviour {
 			colliders = colliders.OrderBy(x => Vector3.Distance(x.transform.position, playerPosition)).ToArray();
 
 			foreach (Collider entity in colliders) {
-				Transform target = entity.transform;
-				Vector3 targetDir = target.position - transform.position;
-				Vector3 heading = target.position - transform.position;
-				float angle = Vector3.Angle(forward, targetDir);
+				Enemy enemy = entity.GetComponent<Enemy>();
 
-				if (angleDir != null){
-					dirNum = angleDir.getDir(transform.forward, heading, transform.up);}
-
-				if (entity.GetComponent<Enemy>() && angle <= fireAngle){
+				if (enemy){
 					RaycastHit hit;
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-					if (Physics.Raycast(playerPosition, targetDir, out hit) && hit.collider.transform.GetComponent<Enemy>()){
-							int attackRoll = Random.Range(1,100);
-							Debug.Log(attackRoll);
+					Vector3 targetDir = enemy.transform.position - playerPosition;
+					Vector3 heading = enemy.transform.position - playerPosition;
+					float angle = Vector3.Angle(forward, targetDir);
 
-							if (attackRoll > entity.GetComponent<Enemy>().deflection){
-								int damageRoll = Random.Range(1,100);
-								entity.GetComponent<Enemy>().stamina -=  damageRoll-entity.GetComponent<Enemy>().damageReduction;
+					if (angleDir != null){
+						dirNum = angleDir.getDir(transform.forward, heading, transform.up);}
 
-								if (damageRoll-entity.GetComponent<Enemy>().damageReduction > entity.GetComponent<Enemy>().ballisticThreshold){
-									entity.GetComponent<Enemy>().condition -= 1;}
-							}
-							break;						
+					if(angle <= fireAngle){
+						if (Physics.Raycast(playerPosition, targetDir, out hit)){
+								int attackRoll = Random.Range(1,100);
+								Debug.Log(attackRoll);
+
+								if (attackRoll > enemy.deflection){
+									int damageRoll = Random.Range(1,100);
+									enemy.stamina -=  damageRoll-enemy.damageReduction;
+
+									if (damageRoll-enemy.damageReduction > enemy.ballisticThreshold){
+										enemy.condition -= 1;}
+								}
+								break;
 						}
-					} 
-				}								
+					}
+				}
 			}
-		}
+		}	
+	}
 }
+
 
 
